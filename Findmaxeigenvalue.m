@@ -6,7 +6,7 @@ log_gamma = -3:0.2:3;
 Ni = length(log_gamma);
 Nj = length(Ps);
 max_eig_value = zeros(Nj,Ni);
-alpha = 10;
+alpha = 0.1;
 A11 = [2.74 -1.27 0.79 0;
        2 0 0 0;
        0 0.5 0 0;
