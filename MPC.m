@@ -4,7 +4,7 @@ clear;
 close all;
 %% Time and step
 Step = 0.2;
-T_end =  50;
+T_end = 50;
 t = 0:Step:T_end;
 %% Variable
 y1d = cell(1,length(t));
@@ -20,9 +20,9 @@ u_2pred = cell(1,length(t));
 y1 = cell(1,length(t));
 y2 = cell(1,length(t));
 %% Parameters
-alpha = 10;
+alpha = 1;
 gamma = 1;
-P = 100;
+P = 12;
 M = P;
 A11 = [2.74 -1.27 0.79 0;
        2 0 0 0;
@@ -128,6 +128,13 @@ for i = 1:length(t)
     else 
         y2d{i} = 0.5;
     end
+%     if t(i) < 7
+%         y2d{i} = 0;
+%     elseif t(i) < 28
+%         y2d{i} = 0.5;
+%     else
+%         y2d{i} = 0;
+%     end
 end
 
 y1d = cell2mat(y1d);
@@ -149,8 +156,8 @@ for i = 1:length(t)
         u2{i} = u2{i-1} + K2*(Yd-Z2m);
         u1_pred_new = GAMMA_1_dot*u1{i-1} + K1_*(Yd-Z1m);
         u2_pred_new = GAMMA_2_dot*u2{i-1} + K2_*(Yd-Z2m);
-        x1_pred_new = A*L1*x1{i} + A*L1_dot*x1_pred_old + B1*u1_pred_new(2)+B2*u2_pred_old(3);
-        x2_pred_new = A*L2*x2{i} + A*L2_dot*x2_pred_old + B2*u2_pred_new(2)+ B1*u1_pred_old(3);
+        x1_pred_new = A*L1*x1{i} + A*L1_dot*x1_pred_old + B1*u1_pred_new(1)+B2*u2_pred_old(2);
+        x2_pred_new = A*L2*x2{i} + A*L2_dot*x2_pred_old + B2*u2_pred_new(1)+ B1*u1_pred_old(2);
         U_pred_new = reshape([u1_pred_new u2_pred_new]',[2*M 1]);
         u1_pred_old = u1_pred_new;
         u2_pred_old = u2_pred_new;
@@ -163,7 +170,7 @@ for i = 1:length(t)
     end
     %% Update
     x1{i+1} = A11*x1{i} + B11*u1{i};
-    x2{i+1} = A22*x1{i} + B22*u2{i};
+    x2{i+1} = A22*x2{i} + B22*u2{i};
 end
 
 y1 = cell2mat(y1);
